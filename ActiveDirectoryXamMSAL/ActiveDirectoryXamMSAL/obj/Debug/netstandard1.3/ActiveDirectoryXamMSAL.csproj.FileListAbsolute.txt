@@ -1,0 +1,10 @@
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/bin/Debug/netstandard1.3/ActiveDirectoryXamMSAL.deps.json
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/bin/Debug/netstandard1.3/ActiveDirectoryXamMSAL.dll
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/bin/Debug/netstandard1.3/ActiveDirectoryXamMSAL.pdb
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.csprojAssemblyReference.cache
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.csproj.CoreCompileInputs.cache
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.MainPage.xaml.g.cs
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.AssemblyInfoInputs.cache
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.AssemblyInfo.cs
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.dll
+/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/Debug/netstandard1.3/ActiveDirectoryXamMSAL.pdb

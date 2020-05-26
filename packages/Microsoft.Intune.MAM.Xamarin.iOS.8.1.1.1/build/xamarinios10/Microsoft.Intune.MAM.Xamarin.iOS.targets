@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+    * 
+    * Xamarin Microsoft Intune MAM iOS build tasks
+    * 
+  -->
+
+  <PropertyGroup>
+    <LocalConfiguratorPath>$(MSBuildThisFileDirectory)IntuneMAMConfigurator</LocalConfiguratorPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ItemToCopyToBuildServer Include="$(LocalConfiguratorPath)">
+      <TargetPath>IntuneMAMConfigurator</TargetPath>
+    </ItemToCopyToBuildServer>
+  </ItemGroup>
+
+  <Target Name="_RunIntuneMAMConfigurator" BeforeTargets="_CompileAppManifest">
+    <Exec Condition="$(OS.Contains('Unix'))" Command="chmod +x $(LocalConfiguratorPath)" />
+<!--    <Exec Condition="$(OS.Contains('Unix'))" Command="$(LocalConfiguratorPath) -i $(_AppManifest) -e $(CodeSignEntitlements)" />-->
+    <CopyFilesToBuildServer Condition="$(OS.Contains('Windows'))" SessionId="$(BuildSessionId)" Files="@(ItemToCopyToBuildServer)" />
+    <Exec Condition="$(OS.Contains('Windows'))" SessionId="$(BuildSessionId)" Command="chmod +x IntuneMAMConfigurator" />
+    <Exec Condition="$(OS.Contains('Windows'))" SessionId="$(BuildSessionId)" Command="./IntuneMAMConfigurator -i $(_AppManifest) -e $(CodeSignEntitlements)" />
+    <Exec Condition="$(OS.Contains('Windows'))" SessionId="$(BuildSessionId)" Command="rm IntuneMAMConfigurator" />
+  </Target>
+</Project>

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- 
+    * 
+    * Microsoft Intune MAM build tasks for Xamarin Forms on Android
+    * 
+  -->
+
+
+  <!-- the pre-build checks -->
+  <Target Name="RemapAndroidAssembliesChecks" Condition=" '@(RemappingConfigFile)' == '' " BeforeTargets="BeforeBuild">
+    <Message Text="No remapping configuration file (RemappingConfigFile build action) was found. Treating as a normal project." />
+  </Target>
+
+
+  <!-- make the 'RemappingConfiguration' build action available in the Visual Studio dropdown -->
+  <ItemGroup>
+    <AvailableItemName Include="RemappingConfigFile" />
+	<!-- By default, we include the remapping-config.json we provide so that most integrators don't have to modify their .csproj at all -->
+	<RemappingConfigFile Condition=" '@(RemappingConfigFile)' == '' " Include="$(MSBuildThisFileDirectory)..\..\content\MonoAndroid10\remapping-config.json" />
+  </ItemGroup>
+  <PropertyGroup>
+    <MicrosoftIntuneMAMTaskFilename Condition=" '$(MicrosoftIntuneMAMTaskFilename)' == '' ">$(MSBuildThisFileDirectory)Microsoft.Intune.MAM.Remapper.Tasks.dll</MicrosoftIntuneMAMTaskFilename>
+  </PropertyGroup>
+
+  <!-- set some defaults -->
+  <PropertyGroup>
+    <MAMRemapperCollectedPath>$(IntermediateOutputPath)mamRemapperAssemblies\</MAMRemapperCollectedPath>
+    <MAMRemapperIntermediateOutputPath>$(IntermediateOutputPath)mamRemapperOutput\</MAMRemapperIntermediateOutputPath>
+    <ProjectDir Condition=" '$(ProjectDir)' == '' ">$(MSBuildThisFileDirectory)\Microsoft.Intune.MAM.Remapper.Tasks.dll</ProjectDir>
+    <ProjectDir Condition=" '$(ProjectDir)' == '' ">$(MSBuildProjectDirectory)</ProjectDir>
+    <RemapAndroidAssembliesDependsOn>
+      AfterResolveReferences;_ResolveMAMRemapperAssemblies;_CollectMAMRemapperAssemblies;$(RemapAndroidAssembliesDependsOn);
+    </RemapAndroidAssembliesDependsOn>
+    <XamarinMSBuildExtensionsPath Condition="'$(XamarinMSBuildExtensionsPath)' == ''">$(MSBuildExtensionsPath)</XamarinMSBuildExtensionsPath>
+    <XamarinMSBuildExtensionsPath Condition="'$(OS)' == 'Unix'">/Library/Frameworks/Mono.framework/External/xbuild</XamarinMSBuildExtensionsPath>
+    <CoreCleanDependsOn>$(CoreCleanDependsOn);CleanMAMRemapperAssemblies</CoreCleanDependsOn>
+  </PropertyGroup>
+
+  <!-- Include the task assemblies -->
+  <UsingTask 
+      AssemblyFile="$(MicrosoftIntuneMAMTaskFilename)"
+      TaskName="Microsoft.Intune.MAM.Remapper.Tasks.RemapAndroidAssemblies" />
+
+  <UsingTask
+      AssemblyFile="$(XamarinMSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Build.Tasks.dll" 
+      TaskName="Xamarin.Android.Tasks.ResolveAssemblies" />
+
+  <!-- the build tasks -->
+  <Target Name="_ResolveMAMRemapperAssemblies" Condition=" '$(DesignTimeBuild)' != 'True' ">
+    <!-- Find all the assemblies this app requires -->
+    <ResolveAssemblies
+      Assemblies="@(ReferencePath)"
+      ReferenceAssembliesDirectory="$(TargetFrameworkDirectory)">
+      <Output TaskParameter="ResolvedAssemblies" ItemName="ResolvedMAMRemapperAssemblies" />
+    </ResolveAssemblies>
+  </Target>
+
+  <Target Name="_CreateCollectedMAMRemapperAssembliesDir" Condition=" '$(DesignTimeBuild)' != 'True' "
+      Inputs="@(ResolvedMAMRemapperAssemblies->'%(Identity)')"
+      Outputs="@(ResolvedMAMRemapperAssemblies->'$(MAMRemapperCollectedPath)%(Filename)%(Extension)')" >
+
+    <!-- Create our intermediate directory -->
+    <MakeDir Directories="$(MAMRemapperCollectedPath)" Condition="!Exists ('$(MAMRemapperCollectedPath)')" />
+  </Target>
+
+  <Target Name="_CollectMAMRemapperAssemblies"
+    Inputs="@(ResolvedMAMRemapperAssemblies)"
+    Outputs="@(ResolvedMAMRemapperAssemblies->'$(MAMRemapperCollectedPath)%(Filename)%(Extension)')"
+    DependsOnTargets="_ResolveMAMRemapperAssemblies;_CreateCollectedMAMRemapperAssembliesDir">
+    <!-- Make a copy of every assembly the remapper will need in mamRemapperAssemblies -->
+    <Copy
+      SourceFiles="@(ResolvedMAMRemapperAssemblies)"
+      DestinationFiles="@(ResolvedMAMRemapperAssemblies->'$(MAMRemapperCollectedPath)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="RemapAndroidAssemblies" Condition=" '@(RemappingConfigFile)' != '' " DependsOnTargets="$(RemapAndroidAssembliesDependsOn)" BeforeTargets="FindReferenceAssembliesForReferences" AfterTargets="BeforeCompile">
+    <Message Text="The Microsoft.Intune.MAM.Remapper.Tasks.RemapAndroidAssemblies build task was located at $(MicrosoftIntuneMAMTaskFilename)." />
+
+    <PropertyGroup>
+      <MAM_Remapper_RemainInHostAppDomain Condition="'$(MAM_Remapper_RemainInHostAppDomain)' == ''">true</MAM_Remapper_RemainInHostAppDomain>
+      <!-- Per the logic in CoreCompile from Microsoft.CSharp.Core.targets in MSBuild 15+ 
+       it is possible for ReferencePath to still be used in 15+ but only when ReferencePathWithRefAssemblies is empty. See 
+       ShimReferencePathsWhenCommonTargetsDoesNotUnderstandReferenceAssemblies. -->
+      <ShouldUseReferencePath Condition="'$(MSBuildToolsVersion)' &lt; '15.0' OR '@(ReferencePathWithRefAssemblies)' == ''">true</ShouldUseReferencePath>
+      <!-- We only want to use ReferencePathWithRefAssemblies when we're 15+ and we're not already taking advantage of ShimReferencePathsWhenCommonTargetsDoesNotUnderstandReferenceAssemblies -->
+      <ShouldUseReferencePathWithRefAssemblies Condition="'$(MSBuildToolsVersion)' >= '15.0' AND '$(ShouldUseReferencePath)' == ''">true</ShouldUseReferencePathWithRefAssemblies>
+    </PropertyGroup>
+
+    <RemapAndroidAssemblies
+        ProjectDir="$(ProjectDir)"
+        RemappingConfigs="@(RemappingConfigFile)"
+        ReferencePaths="@(ReferencePath)"
+        CollectedAssembliesPath="$(MAMRemapperCollectedPath)"
+        DestinationAssembliesPath="$(MAMRemapperIntermediateOutputPath)"
+        RemainInHostAppDomain="$(MAM_Remapper_RemainInHostAppDomain)">
+      <Output TaskParameter="ObsoleteReferences" ItemName="ObsoleteReference"/>
+      <Output TaskParameter="ModifiedReferences" ItemName="ModifiedReference"/>
+    </RemapAndroidAssemblies>
+
+	<!-- This causes the MAM Remapper output DLL, Xamarin.Forms.Platform.Android.dll, to be included in the reference path for CoreCompile's Csc task.
+		 It also removes the existing Xamarin.Forms.Platform.Android.dll. Note that the ReferencePath input var for Csc 
+		 changed with msbuild v15, which is used by default in Visual Studio 17, from ReferencePath to ReferencePathWithRefAssemblies. -->
+    <ItemGroup>
+      <ReferencePath Condition="'$(ShouldUseReferencePath)' == 'true'" Remove="@(ObsoleteReference)" />
+      <ReferencePath Condition="'$(ShouldUseReferencePath)' == 'true'" Include="@(ModifiedReference)"  />
+      <ReferencePathWithRefAssemblies Condition="'$(ShouldUseReferencePathWithRefAssemblies)' == 'true'" Remove="@(ObsoleteReference)" />
+      <ReferencePathWithRefAssemblies Condition="'$(ShouldUseReferencePathWithRefAssemblies)' == 'true'" Include="@(ModifiedReference)"  />
+    </ItemGroup>
+  </Target>
+  
+  <Target Name="CleanMAMRemapperAssemblies">
+    <RemoveDir Directories="$(MAMRemapperCollectedPath);$(MAMRemapperIntermediateOutputPath)" />
+  </Target>
+  
+</Project>

@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL.csproj": {}
+  },
+  "projects": {
+    "/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL.csproj",
+        "projectName": "ActiveDirectoryXamMSAL",
+        "projectPath": "/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL.csproj",
+        "packagesPath": "/Users/HienNV/.nuget/packages/",
+        "outputPath": "/Users/HienNV/Xamarin.Forms/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/ActiveDirectoryXamMSAL/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/HienNV/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard1.3"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard1.3": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard1.3": {
+          "dependencies": {
+            "AsyncUsageAnalyzers": {
+              "target": "Package",
+              "version": "[1.0.0-alpha003, )"
+            },
+            "Microsoft.Identity.Client": {
+              "target": "Package",
+              "version": "[2.0.1-preview, )"
+            },
+            "NETStandard.Library": {
+              "target": "Package",
+              "version": "[1.6.1, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[11.0.2, )"
+            },
+            "Xamarin.Forms": {
+              "target": "Package",
+              "version": "[2.5.0.122203, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

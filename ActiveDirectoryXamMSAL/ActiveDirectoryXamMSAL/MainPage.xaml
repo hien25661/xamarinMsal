@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:local="clr-namespace:ActiveDirectoryXamMSAL;assembly=ActiveDirectoryXamMSAL"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ActiveDirectoryXamMSAL.MainPage" BackgroundColor="White"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true">
+  <ContentPage.Content>
+        <Grid>
+    <StackLayout>
+      <Button x:Name="btnSignInSignOut" Margin="20" Text="{Binding OnSignInSignOutTxt}" Clicked="OnSignInSignOut" BackgroundColor="Olive" TextColor="White" VerticalOptions="End" HeightRequest="60" FontAttributes="Bold" HorizontalOptions="FillAndExpand"/>
+      <StackLayout x:Name="slUser" IsVisible="False" Padding="5,10">
+        <StackLayout Orientation="Horizontal">
+          <Label Text="DisplayName " FontSize="Large" TextColor="Black"  FontAttributes="Bold" />
+          <Label x:Name="lblDisplayName"  FontSize="Large" TextColor="Black"  />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+          <Label Text="GivenName "  FontSize="Large" TextColor="Black"  FontAttributes="Bold" />
+          <Label x:Name="lblGivenName"  FontSize="Large" TextColor="Black"  />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+          <Label Text="Surname "  FontSize="Large" TextColor="Black"  FontAttributes="Bold" />
+          <Label x:Name="lblSurname"  FontSize="Large" TextColor="Black"  />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+          <Label Text="Id "  FontSize="Large" TextColor="Black"  FontAttributes="Bold" />
+          <Label x:Name="lblId"  FontSize="Large" TextColor="Black"  />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+          <Label Text="UserPrincipalName "  FontSize="Large" TextColor="Black"  FontAttributes="Bold" />
+          <Label x:Name="lblUserPrincipalName"  FontSize="Large" TextColor="Black"  />
+        </StackLayout>        
+      </StackLayout>
+    </StackLayout>
+        <Grid IsVisible="{Binding IsLoader}" x:Name="gridLoader">
+        <Frame Padding="0" CornerRadius="15" OutlineColor="Black" VerticalOptions="Center" HorizontalOptions="Center"> 
+            <StackLayout Padding="40,10,40,10" >
+                <ActivityIndicator x:Name="activity"  
+                       IsRunning="true"  
+                       IsEnabled="False" 
+                       Color="Blue"  
+                       BackgroundColor="Transparent"
+                       VerticalOptions="Center"/> 
+                     <Label Text="Loading..." TextColor="Black"  FontSize="Large"/>  
+                </StackLayout>
+            </Frame>
+         </Grid>
+            </Grid>
+  </ContentPage.Content>
+  
+</ContentPage>
